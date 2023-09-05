@@ -93,23 +93,18 @@ public class Welcome_Page {
 	            } catch (Exception e) {
 	               
 	                System.out.println(e.getMessage());
-	            }
-	            
-	            
+	            }                    
 	            
 	        }
 
 	        // Close the scanner when done
 	        sc.close();
-	        
-		 
-        
 
-   
 	 }
 	 
 	 
 	 public void signIn() throws Exception  {
+		    Scanner sc = new Scanner(System.in);
 			System.out.println("Username : ");
 			String uname = sc.next();
 			
@@ -125,7 +120,7 @@ public class Welcome_Page {
 		    	 	 
 		    	 int num  = sc.nextInt();
 		    	 switch(num) {
-		    	 case 1 : banking.addMoney();
+		    	 case 1 : banking.addMoney(2500);
 		    	 break;
 		    	 }
 				 
@@ -134,7 +129,7 @@ public class Welcome_Page {
 				 this.signIn();
 			 }
 		     
-		     
+		 sc.close();    
 	 }
 
 }

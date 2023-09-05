@@ -2,8 +2,16 @@ package banking_app;
 
 
 public class Banking {
-	public void addMoney() {
-		System.out.println("in deposit");
+	float balance;
+	public Banking(){
+
+	}
+	
+	public void addMoney(int amount) {
+		balance += amount;
+		
+		System.out.println(balance);
+
 		
 	}
 	public void withdrawMoney() {
