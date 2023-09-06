@@ -7,11 +7,12 @@ import java.util.Scanner;
 public class Welcome_Page {
 	Database_Service db_service;
 	UserValidation validate_user;
+	Banking bank;
 	String uname;
 	String password;
 	public Welcome_Page(Database_Service db_Service){
 		this.db_service = db_Service;
-		
+		bank = new Banking(db_Service);
 	}
 	Scanner sc;
 	
@@ -29,7 +30,6 @@ public class Welcome_Page {
 			try {
 				this.signIn();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		
@@ -84,7 +84,8 @@ public class Welcome_Page {
 	    	        	   throw new IOException("Invalid Mobile Number");
 	    		   }
 	    			 
-	    			   db_service.DBexecuteQuery(name,uname,password,mobileNo);
+	    			   db_service.DBInsertQuery(name,uname,password,mobileNo);
+					  // db_service.insertData(uname,name);
 	                   success = true;
 
 	    			   this.signIn();
@@ -111,18 +112,55 @@ public class Welcome_Page {
 			System.out.println("Password : ");
 		    String user_password = sc.next(); 
 		    ResultSet res =  db_service.dbUserValidation(uname, user_password);
-		    Banking banking = new Banking();
 		     		  
 		     if(res.next()) {
 					System.out.println("account no : "+ res.getInt(1));
-
-		    	 System.out.println("Press 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance ");
-		    	 	 
-		    	 int num  = sc.nextInt();
+				int num;
+		    	 do{
+				System.out.println("Press 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
+		    	 num = sc.nextInt();
+				 int amount;
 		    	 switch(num) {
-		    	 case 1 : banking.addMoney(2500);
+				 case 0 : break;
+		    	 case 1 : {
+					System.out.println("Enter amount to add to account : ");
+					amount = sc.nextInt();
+					bank.addMoney(amount,uname);
+				 }
 		    	 break;
+				 case 2 :{
+				  System.out.println("enter beneficiary's ac no : ");
+			      int account_no = sc.nextInt();
+				  System.out.println("Enter amount to transfer : ");
+ 				  amount = sc.nextInt();
+				  System.out.println("Enter username :  ");
+				  uname = sc.next();
+				  System.out.println("Enter password : ");
+				  user_password = sc.next(); 
+				  bank.transferMoney(account_no, amount, uname, user_password);
+				  break;
 		    	 }
+				case 3 : {
+				  System.out.println("Enter amount to withdraw : ");
+ 				  amount = sc.nextInt();
+				  System.out.println("Enter username :  ");
+				  uname = sc.next();
+				  System.out.println("Enter password : ");
+				  user_password = sc.next(); 
+				  bank.withdrawMoney(amount,uname,user_password);
+				  break;
+				 }
+				case 4 : {
+				  
+				  bank.checkAccountBalance(uname);
+				break;
+				 }
+				 default : {
+					System.out.println("Invalid choice");
+				 }
+				}
+				}while(num != 0);
+			
 				 
 			 }else {
 				 System.out.println("Incorrect username or password\nPlease Re-enter usename and password");

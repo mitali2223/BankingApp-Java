@@ -8,16 +8,17 @@ public class Bank {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.getMessage();
 		}
 		Database_Service db_connection = new Database_Service("jdbc:mysql://localhost:3306/India_Bank","root","slimshady");
 		Scanner sc = new Scanner(System.in);
 		
 		Welcome_Page wc = new Welcome_Page(db_connection);
-		Welcome_Page.welcome_user();
+		
+		Welcome_Page.welcome_user();		
 		int num = sc.nextInt();
 		wc.user(num);
+
 		sc.close();
 	}
 

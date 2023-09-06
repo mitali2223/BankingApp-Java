@@ -18,46 +18,67 @@ public class Database_Service  {
 		 return connection;	
 	}
 	
-	public void DBexecuteQuery(String name,String uname , String password,long mobileNo) throws Exception {
+	public void DBInsertQuery(String name,String uname , String password,long mobileNo) throws Exception {
 		
 		 st = this.connect().createStatement();
 		 
-		 if(!!doesUsernameExists(uname)) { 
-		 int rowsAffected =  st.executeUpdate("Insert into userData(u_name,userId,u_password,mobileNo) values ('" + name + "', '"+ uname + "', '"+password +"','"+mobileNo +"')");
-		 System.out.println("RowsAffected : "+ rowsAffected);
-		 }
-		 
-		 ResultSet rs = this.dbUserValidation(uname, password);
-		 while(rs.next()) {
+		if(!!doesUsernameExists(uname)) { 
+		    st.executeUpdate("Insert into userData(u_name,userId,u_password,mobileNo) values ('" + name + "', '"+ uname + "', '"+password +"','"+mobileNo +"')");
+		    String str = "insert into useracdetails(userId) select userId from userdata where userId = '" + uname +"';";
+		    st.executeUpdate(str);
+		}
+		ResultSet rs = this.dbUserValidation(uname, password);
+		while(rs.next()) {
 			System.out.println("account no : " + rs.getInt(1) + "  name : " + rs.getString(2));
 		}		
     }
-
-	
 	public ResultSet dbUserValidation(String username ,String password) throws Exception {
-		st = this.connect().createStatement();
-				
-		 String query = "select account_no , u_name  from userData where userId = '"+username + "' and u_password = '"+password+"';";
-
-		 return st.executeQuery(query);		
+		
+		String query = "select account_no , u_name  from userData where userId = '"+username + "' and u_password = '"+password+"';";
+		PreparedStatement pst = this.connect().prepareStatement(query);
+		return pst.executeQuery();		
 	}
-	
 	public boolean doesUsernameExists(String username) throws SQLException {
-		st = this.connect().createStatement();
-		 String str = "select count(userId) from userData where userId = '" + username +"';"; 
-		 ResultSet res = st.executeQuery(str);
-		 if(res.next()) {
-			 System.out.println(res.getInt(1) );
-			 return true;
-		 }
+		String query = "select count(userId) from userData where userId = '" + username +"';"; 
+		PreparedStatement pst = this.connect().prepareStatement(query);
+		ResultSet res = pst.executeQuery();
+		if(res.next()) {
+			System.out.println(res.getInt(1) );
+			return true;
+		}
 		return false;
 	}
-	public void dbTransactions() {
-		
+	public void dbAddMoney(int amount, String username) throws SQLException {
+		CallableStatement cStatement ;
+		cStatement = this.connect().prepareCall("{call spAddAmount(?,?)}");
+		cStatement.setString(1,username);
+		cStatement.setInt(2, amount);
+		cStatement.execute();
+    } 
+     public  ResultSet fetchData(String uname) throws SQLException{
+		String query = " select account_no , u_name , balance from vWfetchData where userId = ?";
+	    PreparedStatement pst = this.connect().prepareStatement(query);
+		pst.setString(1, uname);
+		ResultSet rs = pst.executeQuery();
+		return rs;
+    }
+     public void dbWithdrawMoney(int amount, String username ,String password) throws SQLException {
+		CallableStatement cStatement ;
+		cStatement = this.connect().prepareCall("{call spWithdrawMoney(?,?,?)}");
+		cStatement.setInt(1, amount);
+		cStatement.setString(2,username);
+		cStatement.setString(3,password);
+		cStatement.execute();
+    } 
+     public void dbTransferMoney(int account_no , int amount, String username ,String password) throws SQLException{
+		CallableStatement cStatement ;
+		cStatement = this.connect().prepareCall("{call spTransferMoney(?,?,?,?)}");
+		cStatement.setInt(1,account_no);
+		cStatement.setInt(2, amount);
+		cStatement.setString(3,username);
+		cStatement.setString(4,password);
+		cStatement.execute();
 	}
-	
-	
-
 }
 
 
