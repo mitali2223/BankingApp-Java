@@ -21,22 +21,30 @@ public class Banking {
 	    while(res.next()){
 			if(res.getInt(3) >= amount){
 				db_service.dbWithdrawMoney(amount, username, password);
-				System.out.println( "\nBalance : " + res.getFloat(3));
 			}else{
 				System.out.println("insufficient balance");
 			}
 		}
+		res = db_service.fetchData(username);
+		while(res.next()){
+			System.out.println( "\nBalance : " + res.getFloat(3));
+		}
+			System.out.println("transaction successfully completed");
 	}
+		
 	public void transferMoney(int account_no , int amount, String username , String password) throws SQLException {
 		res = db_service.fetchData(username);
 	    while(res.next()){	
 			if(res.getInt(3) >= amount){
-				db_service.dbTransferMoney(account_no, amount, username, password);
-				System.out.println( "\nBalance : " + res.getFloat(3));
-		}else{
+				db_service.dbTransferMoney(account_no, amount, username, password);	
+		    }else{
 			System.out.println("insufficient balance");
+		    }
+	    }	
+		res = db_service.fetchData(username);
+		while(res.next()){
+			System.out.println( "\nBalance : " + res.getFloat(3));
 		}
-	}
 			System.out.println("transaction successfully completed");
 	}
 	public void checkAccountBalance(String username) throws SQLException {

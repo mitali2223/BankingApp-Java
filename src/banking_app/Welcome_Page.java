@@ -71,7 +71,7 @@ public class Welcome_Page {
 	    			 
 	    			 System.out.println("Password : ");
 	    		     password = sc.nextLine();
-	    			res = ans.passwordValidate(password);
+	    			 res = ans.passwordValidate(password);
 	    				
 	    			 if(res == false) {
 	    	        	   throw new IOException("password must contain at least 8 characters , one uppercase character and atleast one special character(allowed @ ,#,*,%,_,$)");
@@ -85,9 +85,8 @@ public class Welcome_Page {
 	    		   }
 	    			 
 	    			   db_service.DBInsertQuery(name,uname,password,mobileNo);
-					  // db_service.insertData(uname,name);
 	                   success = true;
-
+				   	   System.out.println("sign in to your account");
 	    			   this.signIn();
 	    				    
 	    		 
@@ -117,7 +116,7 @@ public class Welcome_Page {
 					System.out.println("account no : "+ res.getInt(1));
 				int num;
 		    	 do{
-				System.out.println("Press 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
+				System.out.println("\nPress 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
 		    	 num = sc.nextInt();
 				 int amount;
 		    	 switch(num) {
@@ -133,9 +132,9 @@ public class Welcome_Page {
 			      int account_no = sc.nextInt();
 				  System.out.println("Enter amount to transfer : ");
  				  amount = sc.nextInt();
-				  System.out.println("Enter username :  ");
+				  System.out.println("Enter your username :  ");
 				  uname = sc.next();
-				  System.out.println("Enter password : ");
+				  System.out.println("Enter your password : ");
 				  user_password = sc.next(); 
 				  bank.transferMoney(account_no, amount, uname, user_password);
 				  break;
@@ -143,9 +142,9 @@ public class Welcome_Page {
 				case 3 : {
 				  System.out.println("Enter amount to withdraw : ");
  				  amount = sc.nextInt();
-				  System.out.println("Enter username :  ");
+				  System.out.println("Enter your username :  ");
 				  uname = sc.next();
-				  System.out.println("Enter password : ");
+				  System.out.println("Enter your password : ");
 				  user_password = sc.next(); 
 				  bank.withdrawMoney(amount,uname,user_password);
 				  break;

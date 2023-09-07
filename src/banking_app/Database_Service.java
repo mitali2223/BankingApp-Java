@@ -22,7 +22,7 @@ public class Database_Service  {
 		
 		 st = this.connect().createStatement();
 		 
-		if(!!doesUsernameExists(uname)) { 
+		if(!!!doesUsernameExists(uname)) { 
 		    st.executeUpdate("Insert into userData(u_name,userId,u_password,mobileNo) values ('" + name + "', '"+ uname + "', '"+password +"','"+mobileNo +"')");
 		    String str = "insert into useracdetails(userId) select userId from userdata where userId = '" + uname +"';";
 		    st.executeUpdate(str);
@@ -39,11 +39,11 @@ public class Database_Service  {
 		return pst.executeQuery();		
 	}
 	public boolean doesUsernameExists(String username) throws SQLException {
-		String query = "select count(userId) from userData where userId = '" + username +"';"; 
+		String query = "select account_no , u_name from userData where userId = ?"; 
 		PreparedStatement pst = this.connect().prepareStatement(query);
-		ResultSet res = pst.executeQuery();
+		pst.setString(1, username);
+		ResultSet res = pst.executeQuery();	
 		if(res.next()) {
-			System.out.println(res.getInt(1) );
 			return true;
 		}
 		return false;
