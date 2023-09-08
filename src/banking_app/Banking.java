@@ -13,7 +13,7 @@ public class Banking {
 		db_service.dbAddMoney(amount,username);	
 		res = db_service.fetchData(username);
 		while(res.next()){
-				System.out.println( "\nBalance : " + res.getFloat(3));
+				System.out.println( "\nBalance : " + res.getFloat("balance"));
 		}	
 	}
 	public void withdrawMoney(int amount, String username , String password) throws SQLException {
@@ -27,7 +27,7 @@ public class Banking {
 		}
 		res = db_service.fetchData(username);
 		while(res.next()){
-			System.out.println( "\nBalance : " + res.getFloat(3));
+			System.out.println( "\nBalance : " + res.getFloat("balance"));
 		}
 			System.out.println("transaction successfully completed");
 	}
@@ -43,14 +43,14 @@ public class Banking {
 	    }	
 		res = db_service.fetchData(username);
 		while(res.next()){
-			System.out.println( "\nBalance : " + res.getFloat(3));
+			System.out.println( "\nBalance : " + res.getFloat("balance"));
 		}
 			System.out.println("transaction successfully completed");
 	}
 	public void checkAccountBalance(String username) throws SQLException {
 	    res =  db_service.fetchData(username);
 		while(res.next()){
-			System.out.println("\nAccount No : " + res.getInt(1) +  "\nBalance : " + res.getFloat(3));
+			System.out.println("\nAccount No : " + res.getInt("account_no") +  "\nBalance : " + res.getFloat("balance"));
 		}
 	} 	
 }

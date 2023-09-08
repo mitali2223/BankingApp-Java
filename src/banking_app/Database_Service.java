@@ -21,24 +21,25 @@ public class Database_Service  {
 	public void DBInsertQuery(String name,String uname , String password,long mobileNo) throws Exception {
 		
 		 st = this.connect().createStatement();
-		 
+		
 		if(!!!doesUsernameExists(uname)) { 
 		    st.executeUpdate("Insert into userData(u_name,userId,u_password,mobileNo) values ('" + name + "', '"+ uname + "', '"+password +"','"+mobileNo +"')");
 		    String str = "insert into useracdetails(userId) select userId from userdata where userId = '" + uname +"';";
 		    st.executeUpdate(str);
+			System.out.println("user registered successfully");
+		}else{
+		 System.out.println("username already exists\nPlease sign in to your account");
 		}
-		ResultSet rs = this.dbUserValidation(uname, password);
-		while(rs.next()) {
-			System.out.println("account no : " + rs.getInt(1) + "  name : " + rs.getString(2));
-		}		
+		
     }
 	public ResultSet dbUserValidation(String username ,String password) throws Exception {
 		
 		String query = "select account_no , u_name  from userData where userId = '"+username + "' and u_password = '"+password+"';";
 		PreparedStatement pst = this.connect().prepareStatement(query);
-		return pst.executeQuery();		
+		ResultSet rs = pst.executeQuery();
+		 return rs;
 	}
-	public boolean doesUsernameExists(String username) throws SQLException {
+	   private boolean doesUsernameExists(String username) throws SQLException {
 		String query = "select account_no , u_name from userData where userId = ?"; 
 		PreparedStatement pst = this.connect().prepareStatement(query);
 		pst.setString(1, username);
@@ -79,6 +80,7 @@ public class Database_Service  {
 		cStatement.setString(4,password);
 		cStatement.execute();
 	}
+	
 }
 
 

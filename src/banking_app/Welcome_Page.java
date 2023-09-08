@@ -10,17 +10,21 @@ public class Welcome_Page {
 	Banking bank;
 	String uname;
 	String password;
+	Scanner sc = new Scanner(System.in);
+
 	public Welcome_Page(Database_Service db_Service){
 		this.db_service = db_Service;
 		bank = new Banking(db_Service);
 	}
-	Scanner sc;
 	
-	public static void welcome_user() {
+	public void welcome_user() {
 		System.out.println("Welcome to INDIA BANK");
-		
+		int num ;
+        do{
 		System.out.println("Press 1 to sign in to your account\nPress 2 to sign up(create new account)");
-		
+		num = sc.nextInt();
+		this.user(num);
+		}while(num != 1 || num != 2);
 	}
 	
 	
@@ -37,7 +41,7 @@ public class Welcome_Page {
 			this.registerUser();
 				
 		}else {
-			System.out.println(" Invalid choice");
+			System.out.println("Invalid choice ");
 		}
 	}
 	
@@ -49,7 +53,6 @@ public class Welcome_Page {
 	            try {
 	                UserValidation ans = new UserValidation();
 	    			System.out.println("Name : " );
-	    			sc = new Scanner(System.in);
 	                String name = sc.nextLine();
 	                
 	           	                
@@ -86,7 +89,7 @@ public class Welcome_Page {
 	    			 
 	    			   db_service.DBInsertQuery(name,uname,password,mobileNo);
 	                   success = true;
-				   	   System.out.println("sign in to your account");
+				   	   System.out.println("sign in ");
 	    			   this.signIn();
 	    				    
 	    		 
@@ -104,7 +107,6 @@ public class Welcome_Page {
 	 
 	 
 	 public void signIn() throws Exception  {
-		    Scanner sc = new Scanner(System.in);
 			System.out.println("Username : ");
 			String uname = sc.next();
 			
@@ -113,7 +115,7 @@ public class Welcome_Page {
 		    ResultSet res =  db_service.dbUserValidation(uname, user_password);
 		     		  
 		     if(res.next()) {
-					System.out.println("account no : "+ res.getInt(1));
+					System.out.println("account no : "+ res.getInt("account_no") + " name : " + res.getString("u_name"));
 				int num;
 		    	 do{
 				System.out.println("\nPress 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
@@ -156,6 +158,7 @@ public class Welcome_Page {
 				 }
 				 default : {
 					System.out.println("Invalid choice");
+					db_service.connect().close();
 				 }
 				}
 				}while(num != 0);
