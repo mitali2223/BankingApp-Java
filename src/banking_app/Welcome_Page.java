@@ -18,12 +18,13 @@ public class Welcome_Page {
 	}
 	
 	public void welcome_user() {
-		System.out.println("Welcome to INDIA BANK");
 		int num ;
         do{
+		System.out.println("Welcome to INDIA BANK");
 		System.out.println("Press 1 to sign in to your account\nPress 2 to sign up(create new account)");
 		num = sc.nextInt();
-		this.user(num);
+		int val = num;
+		this.user(val);
 		}while(num != 1 || num != 2);
 	}
 	
@@ -49,13 +50,12 @@ public class Welcome_Page {
 	
 	 public void registerUser()  {
 	        boolean success = false;
+			Scanner sc = new Scanner(System.in);
 	        while (!success) {
 	            try {
 	                UserValidation ans = new UserValidation();
 	    			System.out.println("Name : " );
-	                String name = sc.nextLine();
-	                
-	           	                
+	                String name = sc.nextLine();              
 	                boolean res;
 	                
 	                res = ans.nameValidate(name);
@@ -117,18 +117,19 @@ public class Welcome_Page {
 		     if(res.next()) {
 					System.out.println("account no : "+ res.getInt("account_no") + " name : " + res.getString("u_name"));
 				int num;
-		    	 do{
-				System.out.println("\nPress 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
+		    	do{
+				 System.out.println("\nPress 1 to Deposit Money\nPress 2 to Transfer Money\nPress 3 to Withdraw Money\nPress 4 to check Account Balance\nPress 0 to exit ");
 		    	 num = sc.nextInt();
 				 int amount;
 		    	 switch(num) {
-				 case 0 : break;
+				 case 0 : 
+				 break;
 		    	 case 1 : {
 					System.out.println("Enter amount to add to account : ");
 					amount = sc.nextInt();
 					bank.addMoney(amount,uname);
-				 }
 		    	 break;
+				 }
 				 case 2 :{
 				  System.out.println("enter beneficiary's ac no : ");
 			      int account_no = sc.nextInt();
@@ -154,7 +155,7 @@ public class Welcome_Page {
 				case 4 : {
 				  
 				  bank.checkAccountBalance(uname);
-				break;
+				  break;
 				 }
 				 default : {
 					System.out.println("Invalid choice");
@@ -169,7 +170,7 @@ public class Welcome_Page {
 				 this.signIn();
 			 }
 		     
-		 sc.close();    
+		 //sc.close();    
 	 }
 
 }
